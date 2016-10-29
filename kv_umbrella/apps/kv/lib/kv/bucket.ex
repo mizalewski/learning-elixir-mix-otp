@@ -1,4 +1,6 @@
 defmodule KV.Bucket do
+  require Logger
+
   @doc """
   Starts KV bucket
   """
@@ -10,6 +12,7 @@ defmodule KV.Bucket do
   Puts the value to bucket for the given key
   """
   def put(bucket, key, value) do
+    Logger.info("Puts key `#{inspect key}` with value: `#{inspect value}`")
     Agent.update(bucket, &Map.put(&1, key, value))
   end
 
@@ -17,6 +20,7 @@ defmodule KV.Bucket do
   Gets a value from bucket by key
   """
   def get(bucket, key) do
+    Logger.info("Gets value for key `#{inspect key}`")
     Agent.get(bucket, &Map.get(&1, key))
   end
 
@@ -24,6 +28,7 @@ defmodule KV.Bucket do
   Deletes value from given key and returns deleted value
   """
   def delete(bucket, key) do
+    Logger.info("Deletes key `#{inspect key}`")
     Agent.get_and_update(bucket, fn dict -> Map.pop(dict, key) end)
   end
 end

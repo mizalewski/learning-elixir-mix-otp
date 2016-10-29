@@ -1,4 +1,6 @@
 defmodule KV.Registry do
+  require Logger
+
   use GenServer
 
   # Client API
@@ -26,6 +28,7 @@ defmodule KV.Registry do
   Ensures there is a bucket associated to the given `name` in `server`.
   """
   def create(server, name) do
+    Logger.info("Creating bucket `#{inspect name}`")
     GenServer.call(server, {:create, name})
   end
 

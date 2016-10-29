@@ -43,7 +43,7 @@ arguments return an error:
   def run(command, pid)
 
   def run({:create, bucket}, pid) do
-    KV.Registry.create(pid, bucket)
+    KV.Router.route(bucket, KV.Registry, :create, [pid, bucket])
     {:ok, "OK\r\n"}
   end
 
@@ -68,8 +68,8 @@ arguments return an error:
     end)
   end
 
-  def lookup(pid, bucket, callback) do
-    case KV.Registry.lookup(pid, bucket) do
+  defp lookup(pid, bucket, callback) do
+    case KV.Router.route(bucket, KV.Registry, :lookup, [KV.Registry, bucket]) do
       {:ok, pid} -> callback.(pid)
       :error -> {:error, :not_found}
     end
